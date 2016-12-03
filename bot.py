@@ -3,17 +3,14 @@ __author__ = 'Elizaveta Karachinskaya'
 import telebot
 import config
 import db
+from liza_bot import start, proverka
 #соединение с ботом
 bot = telebot.TeleBot(config.token)
 
 #Отвечает на команды
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    query = "SELECT  answers FROM commands WHERE id=1"
-    result = db.query(query)
-
-
-    bot.reply_to(message, result)
+    bot.reply_to(message, start(message.text))
 
 @bot.message_handler(commands=['help'])
 def send_welcome(message):
@@ -24,7 +21,12 @@ def send_welcome(message):
 #Отвечает на все сообщения по умолчанию
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
-    bot.reply_to(message, message.text)
+    gorod = message.text.title()
+    # # gorod = input('Введите город\n').title()
+    # # try:
+    #if proverka(gorod, v) == -1:
+    #     print('Город введен неправильно')
+    bot.reply_to(message, proverka(gorod))
 
 #Запуск бота
 bot.polling()
