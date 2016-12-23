@@ -37,9 +37,9 @@ class SqlMgr:
             cur = self.con.cursor()
             cur.execute(sql)
 
-            # print "the first element in rows will be the column names."
-            column_names = [x[0] for x in cur.description]
-            rows.append(column_names)
+            # # print "the first element in rows will be the column names."
+            # column_names = [x[0] for x in cur.description]
+            # rows.append(column_names)
 
             while True:
                 row = cur.fetchone()
@@ -47,7 +47,7 @@ class SqlMgr:
                 if row == None:
                     break
 
-                rows.append(row)
+                rows.append(row[0])
 
         except lite.Error as e:
 

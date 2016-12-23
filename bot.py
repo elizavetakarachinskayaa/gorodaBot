@@ -3,7 +3,7 @@ __author__ = 'Elizaveta Karachinskaya'
 import telebot
 import config
 import db
-from liza_bot import start, proverka
+from liza_bot import *
 #соединение с ботом
 bot = telebot.TeleBot(config.token)
 
@@ -11,6 +11,7 @@ bot = telebot.TeleBot(config.token)
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
+    message.from_user.id
     bot.reply_to(message, start(message.text))
 
 @bot.message_handler(commands=['help'])
@@ -23,11 +24,18 @@ def send_welcome(message):
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
     gorod = message.text.title()
-    # # gorod = input('Введите город\n').title()
-    # # try:
-    #if proverka(gorod, v) == -1:
-    #     print('Город введен неправильно')
-    bot.reply_to(message, proverka(gorod))
+    # gorod = input('Введите город\n').title()
+    # try:
+    status = proverka(gorod)
+    if status == -1:
+        bot.send_message(message.chat.id, 'Город начинается с другой буквы')
+    elif status == -2:
+        bot.send_message(message.chat.id, 'Такого города нет')
+    else:
+        bot.reply_to(message, bot_reply())
+
+
+
 
 #Запуск бота
 bot.polling()
